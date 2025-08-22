@@ -70,7 +70,7 @@ ORDER BY
     total_daily_amount DESC;
 
 ````
----
+
 #### Final Result
 The image below shows the final output of the daily_company_charges view, demonstrating the successful aggregation of transaction amounts per day for each company. The data is clean, correctly formatted, and ready for business analysis.
 
