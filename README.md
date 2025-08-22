@@ -69,4 +69,4 @@ ORDER BY
     transaction_date,
     total_daily_amount DESC;
 
-![](images/section_1dot5.png)
+![Final SQL View](images/section_1dot5.png)
