@@ -31,10 +31,15 @@ def transform_data(db_params):
         }, inplace=True)
 
         # 2. Convert string dates to datetime objects
-        df['created_at'] = pd.to_datetime(df['created_at'], format='%Y-%m-%dT%H:%M:%S', errors='coerce')
-        df['updated_at'] = pd.to_datetime(df['updated_at'], format='%Y-%m-%dT%H:%M:%S', errors='coerce')
+        df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
+        df['updated_at'] = pd.to_datetime(df['updated_at'], errors='coerce')
         print("Date columns converted to datetime objects.")
-        
+
+        # Drop rows with invalid created_at dates
+        initial_rows_with_dates = len(df)
+        df.dropna(subset=['created_at'], inplace=True)
+        print(f"Dropped {initial_rows_with_dates - len(df)} rows with invalid 'created_at' dates.")
+
         # 3. Create the 'companies' DataFrame 
         
         # First, drop rows with null company_name
