@@ -1,0 +1,18 @@
+# docker-compose.yml
+version: '3.8' # Specify the version of the Docker Compose file format
+
+services:
+  db: # Define a service named 'db'
+    image: postgres:13 # Use the official PostgreSQL 13 image from Docker Hub
+    restart: always # Always restart the container if it stops
+    environment:
+      - POSTGRES_USER=myuser # Sets the superuser name for PostgreSQL
+      - POSTGRES_PASSWORD=mypassword # Sets the superuser password
+      - POSTGRES_DB=mydatabase # Sets the default database to create
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Mount a volume to persist data
+    ports:
+      - "5432:5432" # Map the container's port 5432 to the host's port 5432
+
+volumes:
+  postgres_data: # Define the named volume
