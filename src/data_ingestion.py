@@ -48,7 +48,7 @@ if __name__ == '__main__':
     # Define file path and database connection parameters
     # The `data/` directory is relative to the project root
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    csv_file_path = os.path.join(base_dir, 'data', 'data_prueba_tecnica_1.csv') # Replace with your actual file name
+    csv_file_path = os.path.join(base_dir, 'data', 'data_prueba_tecnica_1.csv') 
 
     db_params = {
         'db_name': 'mydatabase',
