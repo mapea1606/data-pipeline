@@ -54,7 +54,7 @@ if __name__ == '__main__':
         'db_name': 'mydatabase',
         'user': 'myuser',
         'password': 'mypassword',
-        'host': 'localhost', # Use 'localhost' for local testing
+        'host': 'localhost', 
         'port': '5432'
     }
 
