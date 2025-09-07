@@ -1,8 +1,5 @@
-# src/data_ingestion.py
-
 import pandas as pd
 from sqlalchemy import create_engine
-import os
 
 def load_data_to_postgres(csv_file_path, db_params):
     """
@@ -46,9 +43,7 @@ def load_data_to_postgres(csv_file_path, db_params):
 
 if __name__ == '__main__':
     # Define file path and database connection parameters
-    # The `data/` directory is relative to the project root
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    csv_file_path = os.path.join(base_dir, 'data', 'data_prueba_tecnica_1.csv') 
+    csv_file_path = 'data/data_prueba_tecnica_1.csv' 
 
     db_params = {
         'db_name': 'mydatabase',
