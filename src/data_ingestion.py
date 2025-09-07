@@ -15,7 +15,6 @@ def load_data_to_postgres(csv_file_path, db_params):
             f"postgresql://{db_params['user']}:{db_params['password']}@"
             f"{db_params['host']}:{db_params['port']}/{db_params['db_name']}"
         )
-        print("Successfully created SQLAlchemy engine.")
 
         # Read the CSV file into a pandas DataFrame
         df = pd.read_csv(csv_file_path)
@@ -32,8 +31,6 @@ def load_data_to_postgres(csv_file_path, db_params):
         # Load the DataFrame into the 'raw_charges' staging table
         df.to_sql('raw_charges', engine, if_exists='replace', index=False)
         
-        print("Data loaded successfully into the 'raw_charges' table.")
-
     except FileNotFoundError:
         print(f"Error: The file '{csv_file_path}' was not found.")
         raise
@@ -53,6 +50,6 @@ if __name__ == '__main__':
         'port': '5432'
     }
 
-    print("--- Starting Data Ingestion Pipeline ---")
+    print("Starting Data Ingestion Pipeline.")
     load_data_to_postgres(csv_file_path, db_params)
-    print("--- Data Ingestion Completed ---")
+    print("Data Ingestion Completed.")
