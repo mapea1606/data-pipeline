@@ -1,8 +1,5 @@
-# src/data_transformation.py
-
 import pandas as pd
 from sqlalchemy import create_engine
-import os
 import re
 
 def transform_data(db_params):
