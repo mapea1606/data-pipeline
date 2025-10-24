@@ -40,7 +40,7 @@ def load_data_to_postgres(csv_file_path, db_params):
 
 if __name__ == '__main__':
     # Define file path and database connection parameters
-    csv_file_path = 'data/data_prueba_tecnica_1.csv' 
+    csv_file_path = 'data/raw/compras.csv' 
 
     db_params = {
         'db_name': 'mydatabase',
