@@ -1,5 +1,10 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 from sqlalchemy import create_engine
+
+# Load environment variables from .env file
+load_dotenv()
 
 def load_data_to_postgres(csv_file_path, db_params):
     """
@@ -39,16 +44,21 @@ def load_data_to_postgres(csv_file_path, db_params):
         raise
 
 if __name__ == '__main__':
-    # Define file path and database connection parameters
+    # Define file path
     csv_file_path = 'data/raw/compras.csv' 
 
+    # Load database credentials from environment variables
     db_params = {
-        'db_name': 'mydatabase',
-        'user': 'myuser',
-        'password': 'mypassword',
-        'host': 'localhost', 
-        'port': '5432'
+        'db_name': os.getenv('DB_NAME'),
+        'user': os.getenv('DB_USER'),
+        'password': os.getenv('DB_PASSWORD'),
+        'host': os.getenv('DB_HOST', 'localhost'), 
+        'port': os.getenv('DB_PORT', '5432')
     }
+
+    # Validate that required variables are present 
+    if not all([db_params['db_name'], db_params['user'], db_params['password']]):
+        raise ValueError("Missing required environment variables: DB_NAME, DB_USER or DB_PASSWORD")
 
     print("Starting Data Ingestion Pipeline.")
     load_data_to_postgres(csv_file_path, db_params)
