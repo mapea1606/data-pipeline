@@ -2,6 +2,10 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 from sqlalchemy import create_engine
+from config.logging_config import setup_logger
+
+# Initializer logger
+logger = setup_logger(__name__, log_file='logs/ingestion.log')
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,15 +19,17 @@ def load_data_to_postgres(csv_file_path, db_params):
         db_params (dict): A dictionary containing database connection parameters.
     """
     try:
+        logger.info(f"Connecting to database at {db_params['host']}")
         # Create a SQLAlchemy engine for connection
         engine = create_engine(
             f"postgresql://{db_params['user']}:{db_params['password']}@"
             f"{db_params['host']}:{db_params['port']}/{db_params['db_name']}"
         )
 
+        logger.info(f"Reading CSV file: {csv_file_path}")
         # Read the CSV file into a pandas DataFrame
         df = pd.read_csv(csv_file_path)
-        print(f"Loaded {len(df)} rows from '{csv_file_path}'.")
+        logger.info(f"Loaded {len(df)} rows from '{csv_file_path}'.")
 
         # Handle null values in key columns before loading
         # The 'id' column is crucial, so we'll drop rows where it's missing.
@@ -31,16 +37,18 @@ def load_data_to_postgres(csv_file_path, db_params):
         df.dropna(subset=['id'], inplace=True)
         dropped_rows = initial_rows - len(df)
         if dropped_rows > 0:
-            print(f"Dropped {dropped_rows} rows with null 'id'.")
+            logger.warning(f"Dropped {dropped_rows} rows with null 'id'.")
 
+        logger.info("Loading data into 'raw_charges' table...") 
         # Load the DataFrame into the 'raw_charges' staging table
         df.to_sql('raw_charges', engine, if_exists='replace', index=False)
-        
+        logger.info("Data loaded successfully.")
+
     except FileNotFoundError:
-        print(f"Error: The file '{csv_file_path}' was not found.")
+        logger.error(f"Error: The file '{csv_file_path}' was not found.")
         raise
     except Exception as e:
-        print(f"An error occurred during data ingestion: {e}")
+        logger.error(f"An error occurred during data ingestion: {e}")
         raise
 
 if __name__ == '__main__':
@@ -60,6 +68,6 @@ if __name__ == '__main__':
     if not all([db_params['db_name'], db_params['user'], db_params['password']]):
         raise ValueError("Missing required environment variables: DB_NAME, DB_USER or DB_PASSWORD")
 
-    print("Starting Data Ingestion Pipeline.")
+    logger.info("Starting Data Ingestion Pipeline.")
     load_data_to_postgres(csv_file_path, db_params)
-    print("Data Ingestion Completed.")
+    logger.info("Data Ingestion Completed.")
